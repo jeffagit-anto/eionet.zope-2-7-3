@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bookworm-slim
 
 ENV WEBSITE=/var/local/website  \
     PDIR=/usr/local \
@@ -12,9 +12,9 @@ ADD Python-2.3.6.tgz .
 ADD Zope-2.7.3-0.tgz .
 
 RUN groupadd -g 10001 zope \
-   && useradd -u 10000 -g zope zope \
+   && useradd -u 10000 -g zope -ms /bin/bash zope \
    && chown -R zope:zope /opt/Zope-2.7.3-0
-
+   
 RUN apt-get update && apt-get install -y tar build-essential zlib1g-dev \
     && apt-get remove expat dav1d \
     && cd /opt/Python-2.3.6 && ./configure --prefix=$PDIR && sed -i "s/^#zlib/zlib/g" Modules/Setup && make && make install \
